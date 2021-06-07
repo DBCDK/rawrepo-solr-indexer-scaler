@@ -1,0 +1,38 @@
+{
+  "api_base_url": "https://kubernetes.default.svc.cloud.dbc.dk",
+  "namespace": "basismig",
+  "token": "verylongandverysecrettoken",
+  "workers": [
+    {
+      "worker": "rawrepo",
+      "queueworker": "solr-sync",
+      "deployment_name": "rawrepo-solr-indexer"
+    },
+    {
+      "worker": "basis",
+      "queueworker": "solr-sync-basis",
+      "deployment_name": "rawrepo-solr-indexer-basis"
+    }
+  ],
+  "levels": {
+    "LOW": {
+      "value": 0,
+      "name": "low",
+      "replica_count": 1,
+      "scale_down_to": 100
+    },
+    "MID": {
+      "value": 1,
+      "name": "mid",
+      "replica_count": 4,
+      "scale_down_to": 100000,
+      "scale_up_to": 1000
+    },
+    "HIGH": {
+      "value": 2,
+      "name": "high",
+      "replica_count": 8,
+      "scale_up_to": 1000000
+    }
+  }
+}
