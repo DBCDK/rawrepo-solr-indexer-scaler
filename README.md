@@ -13,4 +13,4 @@ echo $(kubectl -n <namespace> get secret $(kubectl get serviceaccount -n <namesp
 ```
 Replace namespace (both places) with the with the correct value and the put the returned value as the `token` value in config.json
 
-You can now run the script.
+You can now run the script: ```python3 scripts/run.py ```
