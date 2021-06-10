@@ -2,7 +2,9 @@
 
 import json
 import requests
+import urllib3
 
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def get_worker_count(namespace, workers):
     res = requests.get(
@@ -38,8 +40,7 @@ def set_replica_count(base_url, namespace, worker, token, replica_count):
     data['spec']['replicas'] = replica_count
 
     # Set replica count
-    res = requests.put(url, json=data, headers=headers, verify=False)
-    print(res)
+    requests.put(url, json=data, headers=headers, verify=False)
 
 
 def get_actual_level(levels, current_replicas):
@@ -71,10 +72,10 @@ def handle_scale(levels, worker):
 
     # Check for scale down threshold
     if expected_level['value'] < actual_level['value']:
-        if expected_level == levels.MID:
-            do_scale = (current_queue_count <= levels.MID['scale_down_to'])
-        elif expected_level == levels.LOW:
-            do_scale = current_queue_count <= levels.LOW['scale_down_to']
+        if expected_level == levels['MID']:
+            do_scale = (current_queue_count <= levels['MID']['scale_down_to'])
+        elif expected_level == levels['LOW']:
+            do_scale = current_queue_count <= levels['LOW']['scale_down_to']
     elif expected_level['value'] > actual_level['value']:
         do_scale = True
 
