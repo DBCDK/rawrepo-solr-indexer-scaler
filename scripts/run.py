@@ -6,9 +6,9 @@ import urllib3
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-def get_worker_count(namespace, workers):
-    res = requests.get(
-        'http://rawrepo-record-service.{0}.svc.cloud.dbc.dk/api/v1/queue/stats/workers'.format(namespace))
+
+def get_worker_count(url, workers):
+    res = requests.get(url + '/api/v1/queue/stats/workers')
     j = res.json()
 
     for found_worker in j['queueStats']:
@@ -97,7 +97,15 @@ namespace = config['namespace']
 token = config['token']
 levels = config['levels']
 
-get_worker_count(namespace, workers)
+# Hack because the rawrepo-record-service service name in metascrum-staging differs from other namespaces
+if 'rawrepo_record_service_url' in config:
+    rawrepo_record_service_url = config['rawrepo_record_service_url']
+    if rawrepo_record_service_url[-1] == '/': # Remove trailing '/' just in case
+        rawrepo_record_service_url = rawrepo_record_service_url[0:-1]
+else:
+    rawrepo_record_service_url = 'http://rawrepo-record-service.{0}.svc.cloud.dbc.dk'.format(namespace)
+
+get_worker_count(rawrepo_record_service_url, workers)
 
 for worker in workers:
     get_replica_count(api_base_url, namespace, worker, token)
