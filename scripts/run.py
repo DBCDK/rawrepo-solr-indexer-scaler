@@ -91,10 +91,12 @@ def handle_scale(levels, worker):
 with open('config.json') as json_file:
     config = json.load(json_file)
 
+with open('/var/run/secrets/kubernetes.io/serviceaccount/token') as file:
+    token = file.read()
+
 workers = config['workers']
 api_base_url = config['api_base_url']
 namespace = config['namespace']
-token = config['token']
 levels = config['levels']
 
 # Hack because the rawrepo-record-service service name in metascrum-staging differs from other namespaces
