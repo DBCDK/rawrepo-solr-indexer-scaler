@@ -91,7 +91,7 @@ def handle_scale(levels, worker):
 with open('config.json') as json_file:
     config = json.load(json_file)
 
-with open('/var/run/secrets/kubernetes.io/serviceaccount/token') as file:
+with open('/var/run/secrets/kubernetes.io/serviceaccount/token', 'r') as file:
     token = file.read()
 
 workers = config['workers']
